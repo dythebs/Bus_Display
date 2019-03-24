@@ -27,7 +27,7 @@ def get_real_track(track):
 	res = requests.post(url, json=track)
 	return res.json()['data']['points']
 
-csv_fp = list(csv.reader(open('lines.csv')))
+csv_fp = list(csv.reader(open('lines.csv', encoding='utf-8')))
 track = []
 last_time_stamp = 0
 name = csv_fp[0][0]
