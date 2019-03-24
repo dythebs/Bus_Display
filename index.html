@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>公交车站点及运行轨迹显示</title>
+    <style>
+        html, body, #container {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="container" class="container"></div>
+<script src="https://webapi.amap.com/loca?v=1.2.0&key=高德 Web API Key"></script>
+<script src="./linedatas.js"></script>
+<script src="./stations.js"></script>
+<script>
+
+    var map = Loca.create('container', {
+        mapStyle: 'amap://styles/normal',
+        features: ['bg', 'road', 'point'],
+        center: [108.149185, 33.663153],
+        zoom: 5,
+        pitch: 40,
+        // Loca 自 1.2.0 起 viewMode 模式默认为 3D，如需 2D 模式，请显示配置。
+        viewMode: '2D'
+    });
+
+    function setLine(data, setting) {
+        var layer = Loca.visualLayer({
+            container: map,
+            fitView: true,
+            type: 'line',
+            shape: 'line'
+        });
+
+        layer.setData(data, setting);
+
+        layer.setOptions({
+            style: {
+                // 3D Line 不支持设置线宽，线宽为 1px
+                borderWidth: 10,
+                opacity: 0.8,
+                color: '#E94316'
+            }
+        });
+
+        layer.render();
+    }
+
+    function setSpot(data, setting) {
+        var layer = Loca.visualLayer({
+            container: map,
+            type: 'point',
+            shape: 'circle'
+        });
+
+        layer.setData(data, setting);
+
+        layer.setOptions({
+            style: {
+                // 根据车辆类型设定不同半径
+                radius: 10,
+                // 根据车辆类型设定不同填充颜色
+                color: '#000000',
+                opacity: 0.8
+            }
+        });
+
+        layer.render()
+    }
+
+    setLine(lines, {lnglat:'lnglat'})
+    setSpot(stations, {lnglat:'lnglat'})
+
+</script>
+</body>
+</html>
